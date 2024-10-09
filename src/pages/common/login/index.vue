@@ -1,79 +1,54 @@
 <template>
   <view>
+    <nav-bar title="登录">
+      <view class="homt-icon-wrap" @click="handleNav">
+        <image
+          v-if="isQuickLogin"
+          class="home-icon"
+          src="https://cdn.mekoommall.com/static/mekoomall/image/home-icon.svg"
+        />
+        <up-icon v-else name="arrow-left" />
+      </view>
+    </nav-bar>
     <view class="login-form-wrap">
       <view class="title">
-        欢迎登录
+        欢迎使用易账记
       </view>
-      <input v-model="tel" class="u-border-bottom" type="number" placeholder="请输入手机号">
-      <view class="u-border-bottom my-40rpx flex">
-        <input v-model="code" class="flex-1" type="number" placeholder="请输入验证码">
-        <view>
-          <u-code ref="uCodeRef" @change="codeChange" />
-          <u-button :text="tips" type="success" size="mini" @click="getCode" />
+      <template v-if="isQuickLogin">
+        <u-button text="手机号快捷登录" type="primary" shape="circle" @click="getCode" />
+        <up-text type="info" text="其它登录方式" size="12" align="center" margin="15px 0 0 0" @click="isQuickLogin = false" />
+      </template>
+      <template v-else>
+        <input v-model="tel" class="u-border-bottom" type="number" placeholder="请输入手机号">
+        <view class="u-border-bottom my-40rpx flex">
+          <input v-model="code" class="flex-1" type="number" placeholder="请输入验证码">
+          <view>
+            <u-code ref="uCodeRef" @change="codeChange" />
+            <u-button :text="tips" type="primary" size="mini" @click="getCode" />
+          </view>
         </view>
-      </view>
-      <button class="login-btn" :style="[inputStyle]" @tap="submit">
-        登录 <text class="i-mdi-login" />
-      </button>
-
-      <view class="alternative">
-        <view class="password">
-          密码登录
-        </view>
-        <view class="issue flex items-center">
-          遇到问题 <text class="i-mdi-help" />
-        </view>
-      </view>
-    </view>
-    <view class="login-type-wrap">
-      <view class="item wechat">
-        <view class="icon">
-          <u-icon size="35" name="weixin-fill" color="rgb(83,194,64)" />
-        </view>
-        微信
-      </view>
-      <view class="item QQ">
-        <view class="icon">
-          <u-icon size="35" name="qq-fill" color="rgb(17,183,233)" />
-        </view>
-        QQ
-      </view>
-    </view>
-    <view class="hint">
-      登录代表同意
-      <text class="link">
-        用户协议、隐私政策，
-      </text>
-      并授权使用您的账号信息（如昵称、头像、收获地址）以便您统一管理
+        <u-button type="primary" :disabled="isSubmit" @tap="submit">
+          登录
+        </u-button>
+      </template>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import uCode from 'uview-plus/components/u-code/u-code.vue';
-import type { CSSProperties } from 'vue';
 import { setToken } from '@/utils/auth';
-// import { useUserStore } from '@/store';
+import navBar from '@/components/page-nav/index.vue';
 
-// const userStore = useUserStore();
 const tel = ref<string>('18502811111');
 const code = ref<string>('1234');
 const tips = ref<string>();
 const uCodeRef = ref<InstanceType<typeof uCode> | null>(null);
-
-const inputStyle = computed<CSSProperties>(() => {
-  const style = {} as CSSProperties;
-  if (tel.value && code.value) {
-    style.color = '#fff';
-    style.backgroundColor = uni.$u.color.warning;
-  }
-  return style;
-});
-
+const isQuickLogin = ref(true);
 function codeChange(text: string) {
   tips.value = text;
 }
-
+const isSubmit = computed(() => tel.value && code.value);
 function getCode() {
   if (uCodeRef.value?.canGetCode) {
     // 模拟向后端请求验证码
@@ -108,14 +83,29 @@ async function submit() {
   setToken('1234567890');
   uni.reLaunch({ url: '/pages/tab/home/index' });
 }
+
+const goHome = () => {
+  uni.reLaunch({
+    url: '/pages/index/index',
+  });
+};
+
+const handleNav = () => {
+  if (isQuickLogin.value) {
+    goHome();
+  }
+  else {
+    isQuickLogin.value = true;
+  }
+};
 </script>
 
 <style lang="scss" scoped>
 .login-form-wrap {
-  @apply mt-80rpx mx-auto mb-0 w-600rpx;
+  @apply mt-175rpx mx-auto mb-0 w-600rpx;
 
   .title {
-    @apply mb-100rpx text-60rpx text-left font-500;
+    @apply mb-100rpx text-40rpx text-center font-500;
   }
 
   input {
@@ -128,40 +118,26 @@ async function submit() {
     color: $u-info;
   }
 
-  .login-btn {
-    @apply flex items-center justify-center py-12rpx px-0 text-30rpx bg-#fdf3d0 border-none;
+}
 
-    color: $u-tips-color;
+.homt-icon-wrap {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto 0;
+    width: 56rpx;
+    height: 56rpx;
+    font-size: 0;
+    background: #fff;
+    border-radius: 50%;
 
-    &::after {
-      @apply border-none;
+    .home-icon {
+      width: 36rpx;
+      height: 36rpx;
     }
   }
-
-  .alternative {
-    @apply flex justify-between mt-30rpx;
-
-    color: $u-tips-color;
-  }
-}
-
-.login-type-wrap {
-  @apply flex justify-between pt-350rpx px-150rpx pb-150rpx;
-
-  .item {
-    @apply flex items-center flex-col text-28rpx;
-
-    color: $u-content-color;
-  }
-}
-
-.hint {
-  @apply px-40rpx py-20rpx text-20rpx;
-
-  color: $u-tips-color;
-
-  .link {
-    color: $u-warning;
-  }
-}
 </style>

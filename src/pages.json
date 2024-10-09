@@ -31,11 +31,18 @@
       "pages": [
         {
           "path": "login/index",
-          "navigationStyle": "custom"
+          "navigationBarTitleText": "登录",
+          "style": {
+            "navigationStyle": "custom"
+          }
         },
         {
           "path": "webview/index",
           "navigationBarTitleText": "网页"
+        },
+        {
+          "path": "create-bill/index",
+          "navigationBarTitleText": "创建账单"
         }
       ]
     }
