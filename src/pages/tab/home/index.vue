@@ -1,14 +1,18 @@
 <template>
-  <view class="flex flex-col items-center justify-center">
-    <z-paging ref="paging" v-model="dataList" empty-view-text="空空如也~~ 点击+号开始记账吧" @query="queryList">
-      <!-- z-paging默认铺满全屏，此时页面所有view都应放在z-paging标签内，否则会被盖住 -->
-      <!-- 需要固定在页面顶部的view请通过slot="top"插入，包括自定义的导航栏 -->
-      <view v-for="(item, index) in dataList" :key="index" class="item">
-        <view class="item-title">
-          {{ item.title }}
-        </view>
+  <view class="flex flex-col p-50rpx">
+    <view class="row flex justify-between">
+      <text class="row-header">
+        最近账单
+      </text>
+      <text class="row-more">
+        更多
+      </text>
+    </view>
+    <scroll-view :scroll-x="true" class="row-container pt-30rpx">
+      <view class="row book-card-container-wrap flex">
+        <BillItem v-for="(bill, index) in billList" :key="index" class="mr-20rpx" v-bind="bill" />
       </view>
-    </z-paging>
+    </scroll-view>
     <image
       class="add-btn h-80rpx w-80rpx"
       src="@/static/tabbar/add.png"
@@ -18,15 +22,18 @@
     <!-- 隐私协议组件 -->
     <agree-privacy v-model="showAgreePrivacy" :disable-check-privacy="false" @agree="handleAgree" />
     <!-- #endif -->
+    <CreatePopup :open="open" @close="handleClose" />
   </view>
 </template>
 
 <script setup lang="ts">
+import CreatePopup from './components/create-popup/index.vue';
+import BillItem from './components/bill-item/index.vue';
 import { useUserStore } from '@/store';
 
 const title = ref<string>();
-const paging = ref();
-const dataList = ref([]);
+const open = ref(false);
+const billList = ref<any[]>([1, 2, 3, 4, 5]);
 
 title.value = import.meta.env.VITE_APP_TITLE;
 
@@ -38,20 +45,36 @@ const showAgreePrivacy = ref(false);
 function handleAgree() {
   console.log('同意隐私政策');
 }
-const queryList = (pageNo: number, pageSize: number) => {
-  console.log(pageNo, pageSize);
-  paging.value.complete([]);
-};
 
 const handleAddBill = () => {
-  uni.navigateTo({ url: '/pages/common/create-bill/index' });
+  // uni.navigateTo({ url: '/pages/common/create-bill/index' });
+  open.value = true;
+};
+const handleClose = (val: any) => {
+  open.value = val;
 };
 </script>
 
 <style scoped lang="scss">
 .add-btn {
-   position: absolute;
+   position: fixed;
    right: 100rpx;
    bottom: 100rpx;
+}
+
+.row-header {
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.row-more {
+  color: gray;
+}
+
+.row-container {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-direction: row;
 }
 </style>

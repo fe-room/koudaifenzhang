@@ -2,12 +2,8 @@
   <view>
     <nav-bar title="登录">
       <view class="homt-icon-wrap" @click="handleNav">
-        <image
-          v-if="isQuickLogin"
-          class="home-icon"
-          src="https://cdn.mekoommall.com/static/mekoomall/image/home-icon.svg"
-        />
-        <up-icon v-else name="arrow-left" />
+        <up-icon v-if="isQuickLogin" color="#000000" bold name="home" size="24" />
+        <up-icon v-else color="#000000" bold name="arrow-left" size="24" />
       </view>
     </nav-bar>
     <view class="login-form-wrap">
@@ -27,7 +23,7 @@
             <u-button :text="tips" type="primary" size="mini" @click="getCode" />
           </view>
         </view>
-        <u-button type="primary" :disabled="isSubmit" @tap="submit">
+        <u-button type="primary" :disabled="!isSubmit" @tap="submit">
           登录
         </u-button>
       </template>
@@ -48,7 +44,7 @@ const isQuickLogin = ref(true);
 function codeChange(text: string) {
   tips.value = text;
 }
-const isSubmit = computed(() => tel.value && code.value);
+const isSubmit = computed(() => (tel.value && code.value));
 function getCode() {
   if (uCodeRef.value?.canGetCode) {
     // 模拟向后端请求验证码
