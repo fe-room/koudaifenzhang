@@ -8,7 +8,7 @@
     </nav-bar>
     <view class="login-form-wrap">
       <view class="title">
-        欢迎使用易账记
+        欢迎使用口袋分账
       </view>
       <template v-if="isQuickLogin">
         <u-button text="手机号快捷登录" type="primary" shape="circle" @click="getCode" />

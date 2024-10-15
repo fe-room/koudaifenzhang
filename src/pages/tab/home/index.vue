@@ -4,7 +4,7 @@
       <text class="row-header">
         最近账单
       </text>
-      <text class="row-more">
+      <text class="row-more" @click="handleGotoList">
         更多
       </text>
     </view>
@@ -52,6 +52,9 @@ const handleAddBill = () => {
 };
 const handleClose = (val: any) => {
   open.value = val;
+};
+const handleGotoList = () => {
+  uni.navigateTo({ url: '/pages/common/bill-list/index' });
 };
 </script>
 

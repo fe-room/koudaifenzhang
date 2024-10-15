@@ -11,7 +11,7 @@
     {
       "path": "pages/tab/home/index",
       "style": {
-        "navigationBarTitleText": "易账记",
+        "navigationBarTitleText": "口袋分账",
         "navigationBarBackgroundColor": "#2979ff",
         "navigationBarTextStyle": "white",
         "enablePullDownRefresh": true,
@@ -23,6 +23,9 @@
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/tab/bill/index"
     }
   ],
   "subPackages": [
@@ -41,8 +44,12 @@
           "navigationBarTitleText": "网页"
         },
         {
-          "path": "create-bill/index",
-          "navigationBarTitleText": "创建账单"
+          "path": "bill-detail/index",
+          "navigationBarTitleText": "账单详情"
+        },
+        {
+          "path": "bill-list/index",
+          "navigationBarTitleText": "账单列表"
         }
       ]
     }
@@ -54,9 +61,14 @@
     "backgroundColor": "#ffffff",
     "list": [{
       "pagePath": "pages/tab/home/index",
-      "text": "明细",
-      "iconPath": "static/tabbar/form.png",
-      "selectedIconPath": "static/tabbar/form_fill.png"
+      "text": "首页",
+      "iconPath": "static/tabbar/home.png",
+      "selectedIconPath": "static/tabbar/home-fill.png"
+    }, {
+      "pagePath": "pages/tab/bill/index",
+      "text": "",
+      "iconPath": "static/tabbar/add.png",
+      "selectedIconPath": "static/tabbar/add.png"
     }, {
       "pagePath": "pages/tab/user/index",
       "text": "我的",
